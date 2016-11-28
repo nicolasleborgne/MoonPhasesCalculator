@@ -1,0 +1,20 @@
+{
+    "name": "nicolasleborgne/moon-phases-calculator",
+    "description": "Generate date for each moon phases, from current date, current month, or a given date",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Nicolas Le Borgne",
+            "email": "le.borgne.nicolas44@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MoonPhaseCalculator\\": "src/MoonPhaseCalculator"
+        }
+    }
+}
