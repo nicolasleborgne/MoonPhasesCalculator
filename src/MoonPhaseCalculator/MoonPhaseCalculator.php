@@ -9,6 +9,9 @@ use \DateTimeZone;
 
 class MoonPhaseCalculator
 {
+
+    private $timeZone = null;
+
     /**
     * [$newMoonDateTime description]
     * @var [type]
@@ -43,12 +46,14 @@ class MoonPhaseCalculator
     const MOON_SYNODIC_PERIOD = 29.53058886;
 
     /**
-    * Constructor
-    * @method __construct
-    * @param  DateTime    $dateTime DateTime from wich compute moon phases
-    */
-    function __construct(DateTime $dateTime)
+     * Constructor
+     * @method __construct
+     * @param  DateTime $dateTime DateTime from wich compute moon phases
+     * @param DateTimeZone $timeZone
+     */
+    function __construct(DateTime $dateTime, DateTimeZone $timeZone = null)
     {
+        $this->timeZone = $timeZone;
         $decimalYear = $this->convertDateTimeToFloat($dateTime);
 
         $this->setNewMoonDateTime($this->calculateMoonPhase(MoonPhases::NEW_MOON, $decimalYear));
@@ -101,7 +106,7 @@ class MoonPhaseCalculator
             echo 'jde: '.$jde.PHP_EOL;
             echo 'jd: '.$jd.PHP_EOL;
 
-            $dateTime = new DateTime(jdtogregorian(round($jd)), new DateTimeZone('Europe/Paris'));
+            $dateTime = new DateTime(jdtogregorian(round($jd)), $this->timeZone/*, new DateTimeZone('Europe/Paris')*/);
             break;
             case MoonPhases::FIRST_QUARTER:
             $k += 0.25;
@@ -125,7 +130,7 @@ class MoonPhaseCalculator
             $jde = 2451550.09765 + (self::MOON_SYNODIC_PERIOD * $k) + (0.0001337 * pow($t, 2)) - (0.000000150 * pow($t, 3)) + (0.00000000073 * pow($t, 4));
             $jd = $jde + $s1 + $s4 + $w;
 
-            $dateTime = new \DateTime(jdtogregorian(round($jd)), new \DateTimeZone('Europe/Paris'));
+            $dateTime = new \DateTime(jdtogregorian(round($jd)), $this->timeZone/*, new \DateTimeZone('Europe/Paris')*/);
             break;
             case MoonPhases::FULL_MOON:
             $k += 0.50;
@@ -148,7 +153,7 @@ class MoonPhaseCalculator
             $jde = 2451550.09765 + (self::MOON_SYNODIC_PERIOD * $k) + (0.0001337 * pow($t, 2)) - (0.000000150 * pow($t, 3)) + (0.00000000073 * pow($t, 4));
             $jd = $jde + $s1 + $s3;
 
-            $dateTime = new DateTime(jdtogregorian(round($jd)), new DateTimeZone('Europe/Paris'));
+            $dateTime = new DateTime(jdtogregorian(round($jd)), $this->timeZone/*, new DateTimeZone('Europe/Paris')*/);
             break;
             case MoonPhases::LAST_QUARTER:
             $k += 0.75;
@@ -172,7 +177,7 @@ class MoonPhaseCalculator
             $jde = 2451550.09765 + (self::MOON_SYNODIC_PERIOD * $k) + (0.0001337 * pow($t, 2)) - (0.000000150 * pow($t, 3)) + (0.00000000073 * pow($t, 4));
             $jd = $jde + $s1 + $s4 - $w;
 
-            $dateTime = new DateTime(jdtogregorian(round($jd)), new DateTimeZone('Europe/Paris'));
+            $dateTime = new DateTime(jdtogregorian(round($jd)), $this->timeZone/*, new DateTimeZone('Europe/Paris')*/);
             break;
             default:
             return;
@@ -181,6 +186,7 @@ class MoonPhaseCalculator
 
         return $dateTime;
     }
+
 
     private function convertAngleOn360DegInterval($angle)
     {
@@ -195,7 +201,7 @@ class MoonPhaseCalculator
     */
     private function convertDateTimeToFloat(\DateTime $dateTime)
     {
-        return $dateTime->format("Y") + $dateTime->format("z") * 24 * 3600 / self::NB_SECOND_PER_YEAR;
+        return ((Integer)$dateTime->format("Y")) + $dateTime->format("z") * 24 * 3600 / self::NB_SECOND_PER_YEAR;
     }
 
     private function getPlanetaryArguments($k, $t)
