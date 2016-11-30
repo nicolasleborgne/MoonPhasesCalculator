@@ -1,3 +1,5 @@
 /MoonPhaseCalculator/Autoloader.php
 test.php
 /vendor/
+.idea/
+.DS_Store/
