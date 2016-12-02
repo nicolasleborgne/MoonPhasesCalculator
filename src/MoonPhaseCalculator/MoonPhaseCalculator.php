@@ -9,42 +9,63 @@ use \DateTimeZone;
 
 class MoonPhaseCalculator
 {
-
+    /**
+     * TimeZone to use for returning the DateTime
+     *
+     * @var DateTimeZone|null
+     */
     private $timeZone = null;
 
+    /**
+     * DateTime used to compute moon phases
+     *
+     * @var DateTime|null
+     */
     private $dateTime = null;
 
+    /**
+     * Float transcription of $dateTime
+     *
+     * @var Float|null
+     */
     private $decimalYear = null;
 
 
     /**
-    * [NB_SECOND_PER_YEAR description]
-    * @var integer
-    */
+     * Number of second per year
+     */
     const NB_SECOND_PER_YEAR = 31557600;
 
-
+    /**
+     * Synodic period of the moon
+     */
     const MOON_SYNODIC_PERIOD = 29.53058886;
 
     /**
-     * Constructor
-     * @method __construct
-     * @param  DateTime $dateTime DateTime from wich compute moon phases
-     * @param DateTimeZone $timeZone
+     * @param DateTime $dateTime
+     * @param DateTimeZone|null $timeZone
      */
     function __construct(DateTime $dateTime, DateTimeZone $timeZone = null)
     {
         $this->timeZone = $timeZone;
-        $this->decimalYear = $this->convertDateTimeToFloat($dateTime);
+        $this->setDateTime($dateTime);
     }
 
-
+    /**
+     * Get the $dateTime property
+     *
+     * @return DateTime|null
+     */
     public function getDateTime()
     {
         return $this->dateTime;
     }
 
-
+    /**
+     * Set the $dateTime property and transcript it in float inside $decimalYear property
+     *
+     * @param DateTime $dateTime
+     */
     public function setDateTime(DateTime $dateTime)
     {
         $this->dateTime = $dateTime;
@@ -52,9 +73,9 @@ class MoonPhaseCalculator
     }
 
     /**
-     * Get the new moon phase date
-     * @method getNewMoonDateTime
-     * @return DateTime             New moon phase DateTime
+     * Get a DateTime for new moon from $dateTime property
+     *
+     * @return DateTime
      */
     public function getNewMoon()
     {
@@ -77,9 +98,34 @@ class MoonPhaseCalculator
     }
 
     /**
-     * Get the first quarter moon phase date
-     * @method getFirstQuarterDateTime
-     * @return DateTime                  First quarter moon phase DateTime
+     * Get a DateTime for waxing crescent from $dateTime property
+     *
+     * @return DateTime
+     */
+    public function getWaxingCrescent()
+    {
+        $k = $this->computeK(MoonPhases::NEW_MOON);
+        $t = $this->computeT($k);
+        $e = $this->computeE($t);
+
+        $m = $this->computeM($k, $t);
+        $mp = $this->computeMP($k, $t);
+        $f = $this->computeF($k, $t);
+        $ohm = $this->computeOhm($k, $t);
+
+        $s1 = $this->getFirstCorrectionsFactorsGroupFromPlanetaryArguments($this->getPlanetaryArguments($k, $t));
+        $s2 = $this->getSecondCorrectionsFactorsGroup($e, $mp, $m, $f, $ohm);
+
+        $jde = $this->computeJDE($k, $t);
+        $jd = $jde + $s1 + $s2 + self::MOON_SYNODIC_PERIOD / 8;
+
+        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+    }
+
+    /**
+     * Get a DateTime for first quarter from $dateTime property
+     *
+     * @return DateTime
      */
     public function getFirstQuarter()
     {
@@ -103,9 +149,36 @@ class MoonPhaseCalculator
     }
 
     /**
-     * Get the full moon phase date
-     * @method getFullMoonDateTime
-     * @return DateTime              Full moon phase DateTime
+     * Get a DateTime for waxing gibbous from $dateTime property
+     *
+     * @return DateTime
+     */
+    public function getWaxingGibbous()
+    {
+        $k = $this->computeK(MoonPhases::FIRST_QUARTER);
+        $t = $this->computeT($k);
+        $e = $this->computeE($t);
+
+        $m = $this->computeM($k, $t);
+        $mp = $this->computeMP($k, $t);
+        $f = $this->computeF($k, $t);
+        $ohm = $this->computeOhm($k, $t);
+
+        $s1 = $this->getFirstCorrectionsFactorsGroupFromPlanetaryArguments($this->getPlanetaryArguments($k, $t));
+        $s4 = $this->getFourthCorrectionsFactors($e, $mp, $m, $f, $ohm);
+        $w = $this->computeW($e, $m, $mp, $f);
+
+        $jde = $this->computeJDE($k, $t);
+        $jd = $jde + $s1 + $s4 + $w + self::MOON_SYNODIC_PERIOD / 8;
+
+        return new DateTime(jdtogregorian(round($jd)), $this->timeZone/*, new \DateTimeZone('Europe/Paris')*/);
+    }
+
+
+    /**
+     * Get a DateTime for full moon from $dateTime property
+     *
+     * @return DateTime
      */
     public function getFullMoon()
     {
@@ -124,14 +197,38 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s3;
 
-        return $jd;
-        //return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
     }
 
     /**
-     * Get the last quarter moon phase date
-     * @method getLastQuarterDateTime
-     * @return DateTime                 Last quarter moon phase DateTime
+     * Get a DateTime for waning gibbous from $dateTime property
+     *
+     * @return DateTime
+     */
+    public function getWaningGibbous()
+    {
+        $k = $this->computeK(MoonPhases::FULL_MOON);
+        $t = $this->computeT($k);
+        $e = $this->computeE($t);
+
+        $m = $this->computeM($k, $t);
+        $mp = $this->computeMP($k, $t);
+        $f = $this->computeF($k, $t);
+        $ohm = $this->computeOhm($k, $t);
+
+        $s1 = $this->getFirstCorrectionsFactorsGroupFromPlanetaryArguments($this->getPlanetaryArguments($k, $t));
+        $s3 = $this->getThirdCorrectionsFactorsGroup($e, $mp, $m, $f, $ohm);
+
+        $jde = $this->computeJDE($k, $t);
+        $jd = $jde + $s1 + $s3 + self::MOON_SYNODIC_PERIOD / 8;
+
+        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+    }
+
+    /**
+     * Get a DateTime for last quarter from $dateTime property
+     *
+     * @return DateTime
      */
     public function getLastQuarter()
     {
@@ -155,22 +252,56 @@ class MoonPhaseCalculator
     }
 
     /**
-     * Convert a DateTime php object into float
-     * @method convertDateTimeToFloat
-     * @param  DateTime           $dateTime Date to convert to float
-     * @return Float                       Year in decimal
+     * Get a DateTime for waning crescent from $dateTime property
+     *
+     * @return DateTime
+     */
+    public function getWaningCrescent()
+    {
+        $k = $this->computeK(MoonPhases::LAST_QUARTER);
+        $t = $this->computeT($k);
+        $e = $this->computeE($t);
+
+        $m = $this->computeM($k, $t);
+        $mp = $this->computeMP($k, $t);
+        $f = $this->computeF($k, $t);
+        $ohm = $this->computeOhm($k, $t);
+
+        $s1 = $this->getFirstCorrectionsFactorsGroupFromPlanetaryArguments($this->getPlanetaryArguments($k, $t));
+        $s4 = $this->getFourthCorrectionsFactors($e, $mp, $m, $f, $ohm);
+        $w = $this->computeW($e, $m, $mp, $f);
+
+        $jde = $this->computeJDE($k, $t);
+        $jd = $jde + $s1 + $s4 - $w + self::MOON_SYNODIC_PERIOD / 8;
+
+        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+    }
+
+    /**
+     * Convert a DateTime object in a decimal year
+     *
+     * @param DateTime $dateTime
+     * @return int
      */
     private function convertDateTimeToFloat(\DateTime $dateTime)
     {
         return ((Integer)$dateTime->format("Y")) + $dateTime->format("z") * 24 * 3600 / self::NB_SECOND_PER_YEAR;
     }
 
+    /**
+     * Convert an angle > 360° or < 0° on a 0°-360° based angle
+     *
+     * @param $angle
+     * @return float
+     */
     private function convertAngleOn360DegInterval($angle)
     {
         return ($angle / 360 - floor($angle / 360)) * 360;
     }
 
     /**
+     * Compute K argument
+     *
      * @param $moonPhase
      * @return float
      */
@@ -200,47 +331,110 @@ class MoonPhaseCalculator
         return $k;
     }
 
+    /**
+     * Compute T argument
+     *
+     * @param $k
+     * @return float
+     */
     private function computeT($k)
     {
         return $k / 1236.85;
     }
 
+    /**
+     * Compute E argument
+     *
+     * @param $t
+     * @return int
+     */
     private function computeE($t)
     {
         return $e = 1 - 0.002516 * $t - 0.0000074 * pow($t, 2);
     }
 
+    /**
+     * Compute M argument
+     *
+     * @param $k
+     * @param $t
+     * @return float
+     */
     private function computeM($k, $t)
     {
         return  $this->convertAngleOn360DegInterval(2.5534 + (29.10535669 * $k) - (0.00000218 * pow($t, 2)) - (0.00000011 * pow($t, 3)));
     }
 
+    /**
+     * Compute MP argument
+     *
+     * @param $k
+     * @param $t
+     * @return float
+     */
     private function computeMP($k, $t)
     {
         return $this->convertAngleOn360DegInterval(201.5643 + (385.81693528 * $k) + (0.0107438 * pow($t, 2)) + (0.00001239 * pow($t, 3)) - (0.000000058 * pow($t, 4)));
     }
 
+    /**
+     * Compute F argument
+     *
+     * @param $k
+     * @param $t
+     * @return float
+     */
     private function computeF($k, $t)
     {
         return $this->convertAngleOn360DegInterval(160.7108 + (390.67050274 * $k) - (0.0016341 * pow($t, 2)) - (0.00000227 * pow($t, 3)) + (0.000000011 * pow($t, 4)));
     }
 
+    /**
+     * Compute Ohm argument
+     *
+     * @param $k
+     * @param $t
+     * @return float
+     */
     private function computeOhm($k, $t)
     {
         return $this->convertAngleOn360DegInterval(124.7746 - 1.56375580 * $k + 0.0020691 * pow($t, 2) + 0.00000215 * pow($t, 3));
     }
 
+    /**
+     * Compute W argument
+     *
+     * @param $e
+     * @param $m
+     * @param $mp
+     * @param $f
+     * @return float
+     */
     private function computeW($e, $m, $mp, $f)
     {
         return 0.00306 - (0.00038 * $e * cos(deg2rad($m))) + (0.00026 * cos(deg2rad($mp))) - (0.00002 * cos(deg2rad($mp - $m))) + (0.00002 * cos(deg2rad($mp + $m))) + (0.00002 * cos(deg2rad(2 * $f)));
 
     }
 
+    /**
+     * Compute Julian Date Ephemeris
+     *
+     * @param $k
+     * @param $t
+     * @return float
+     */
     private function computeJDE($k, $t)
     {
         return 2451550.09765 + (self::MOON_SYNODIC_PERIOD * $k) + (0.0001337 * pow($t, 2)) - (0.000000150 * pow($t, 3)) + (0.00000000073 * pow($t, 4));
     }
 
+    /**
+     * Get Planetary arguments
+     *
+     * @param $k
+     * @param $t
+     * @return array
+     */
     private function getPlanetaryArguments($k, $t)
     {
         $planetaryArguments[] = 299.77 + (0.107408 * $k) - (0.009173 * pow($t, 2));
@@ -261,6 +455,12 @@ class MoonPhaseCalculator
         return $planetaryArguments;
     }
 
+    /**
+     * Get a sum of first corrections factors group
+     *
+     * @param array $planetaryArguments
+     * @return number
+     */
     private function getFirstCorrectionsFactorsGroupFromPlanetaryArguments(Array $planetaryArguments)
     {
         $corrections[] = 0.000325 * sin(deg2rad($planetaryArguments[0]));
@@ -281,6 +481,16 @@ class MoonPhaseCalculator
         return array_sum($corrections);
     }
 
+    /**
+     * Get a sum of second corrections factors group
+     *
+     * @param $e
+     * @param $mp
+     * @param $m
+     * @param $f
+     * @param $ohm
+     * @return number
+     */
     private function getSecondCorrectionsFactorsGroup($e, $mp, $m, $f, $ohm)
     {
         $corrections[] = -0.40720 * sin(deg2rad($mp));
@@ -312,6 +522,16 @@ class MoonPhaseCalculator
         return array_sum($corrections);
     }
 
+    /**
+     * Get a sum of third corrections factors group
+     *
+     * @param $e
+     * @param $mp
+     * @param $m
+     * @param $f
+     * @param $ohm
+     * @return number
+     */
     private function getThirdCorrectionsFactorsGroup($e, $mp, $m, $f, $ohm)
     {
         $corrections[] = -0.40614 * sin(deg2rad($mp));
@@ -343,6 +563,16 @@ class MoonPhaseCalculator
         return array_sum($corrections);
     }
 
+    /**
+     * Get a sum of fourth corrections factors group
+     *
+     * @param $e
+     * @param $mp
+     * @param $m
+     * @param $f
+     * @param $ohm
+     * @return number
+     */
     private function getFourthCorrectionsFactors($e, $mp, $m, $f, $ohm)
     {
         $corrections[] = -0.62801 * sin(deg2rad( $mp));
