@@ -7,6 +7,17 @@ use \DateTime;
 use \DateTimeZone;
 use \DateInterval;
 
+/**
+ * Class MoonPhaseCalculator
+ *
+ * This class allowed to compute moon phases from a php DateTime.
+ * It is based on the Jean Meeus Algorythm.
+ *
+ * @author Nicolas Le Borgne <le.borgne.nicolas44@gmail.com>
+ * @package MoonPhaseCalculator
+ * @see http://zpag.net/Calendrier/calculer_phases_lune.htm
+ * @see http://zpag.net/Calendrier/phase_moon_Algorithms.pdf
+ */
 class MoonPhaseCalculator
 {
     /**
@@ -80,6 +91,7 @@ class MoonPhaseCalculator
     public function getNewMoon()
     {
         $k = $this->computeK(MoonPhases::NEW_MOON);
+        echo $this->decimalYear;
         $t = $this->computeT($k);
         $e = $this->computeE($t);
 
