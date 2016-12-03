@@ -5,7 +5,7 @@ namespace MoonPhaseCalculator;
 use MoonPhaseCalculator\MoonPhases;
 use \DateTime;
 use \DateTimeZone;
-
+use \DateInterval;
 
 class MoonPhaseCalculator
 {
@@ -94,7 +94,7 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s2;
 
-        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+        return $this->convertJDToDateTime($jd);
     }
 
     /**
@@ -119,7 +119,7 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s2 + self::MOON_SYNODIC_PERIOD / 8;
 
-        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+        return $this->convertJDToDateTime($jd);
     }
 
     /**
@@ -145,7 +145,7 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s4 + $w;
 
-        return new DateTime(jdtogregorian(round($jd)), $this->timeZone/*, new \DateTimeZone('Europe/Paris')*/);
+        return $this->convertJDToDateTime($jd);
     }
 
     /**
@@ -171,7 +171,7 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s4 + $w + self::MOON_SYNODIC_PERIOD / 8;
 
-        return new DateTime(jdtogregorian(round($jd)), $this->timeZone/*, new \DateTimeZone('Europe/Paris')*/);
+        return $this->convertJDToDateTime($jd);
     }
 
 
@@ -197,7 +197,7 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s3;
 
-        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+        return $this->convertJDToDateTime($jd);
     }
 
     /**
@@ -222,7 +222,7 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s3 + self::MOON_SYNODIC_PERIOD / 8;
 
-        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+        return $this->convertJDToDateTime($jd);
     }
 
     /**
@@ -248,7 +248,7 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s4 - $w;
 
-        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+        return $this->convertJDToDateTime($jd);
     }
 
     /**
@@ -274,7 +274,7 @@ class MoonPhaseCalculator
         $jde = $this->computeJDE($k, $t);
         $jd = $jde + $s1 + $s4 - $w + self::MOON_SYNODIC_PERIOD / 8;
 
-        return new DateTime(jdtogregorian(round($jd)), $this->timeZone);
+        return $this->convertJDToDateTime($jd);
     }
 
     /**
@@ -286,6 +286,17 @@ class MoonPhaseCalculator
     private function convertDateTimeToFloat(\DateTime $dateTime)
     {
         return ((Integer)$dateTime->format("Y")) + $dateTime->format("z") * 24 * 3600 / self::NB_SECOND_PER_YEAR;
+    }
+
+    private function convertJDToDateTime($julianDays)
+    {
+        $h = floor(24 * ($julianDays - floor($julianDays))) + 12;
+        $m =  floor(1440 * (($julianDays - floor($julianDays)) - (($h - 12) / 24)));
+        $s = 86400 * (($julianDays - floor($julianDays)) - (($h - 12) / 24) - ($m / 1440) ) ;
+        $dateTime = new DateTime(jdtogregorian(floor($julianDays)), new DateTimeZone('Europe/Paris'));
+        $dateTime->add(new DateInterval('PT'.$h.'H'.$m.'M'.floor($s).'S'));
+
+        return $dateTime;
     }
 
     /**
