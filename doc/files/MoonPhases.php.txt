@@ -61,3 +61,4 @@ abstract class MoonPhases
      */
     const WANING_CRESCENT = 7;
 }
+

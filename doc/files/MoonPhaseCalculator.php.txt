@@ -643,3 +643,4 @@ class MoonPhaseCalculator
         return array_sum($corrections);
     }
 }
+
