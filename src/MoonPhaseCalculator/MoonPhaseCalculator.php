@@ -101,7 +101,6 @@ class MoonPhaseCalculator
     public function getNewMoon()
     {
         $k = $this->computeK(MoonPhases::NEW_MOON);
-        echo $this->decimalYear;
         $t = $this->computeT($k);
         $e = $this->computeE($t);
 
@@ -299,6 +298,57 @@ class MoonPhaseCalculator
         return $this->convertJDToDateTime($jd);
     }
 
+
+    /**
+     * Get the actual moon phase from the current date
+     *
+     * @return int|null|string
+     */
+    public function getCurrentMoonPhase()
+    {
+        $return = null;
+        $this->setDateTime(new DateTime('now', $this->timeZone));
+
+        if ($this->dateTimeDiffToSecond($this->dateTime, $this->getNewMoon()) > 0) {
+            $this->setDateTime($this->dateTime->sub(new DateInterval('P15D')));
+        }
+
+        $currentDate = new DateTime('now', $this->timeZone);
+        $moonPhases = $this->getAllMoonPhases();
+
+        if ($this->dateTimeDiffToSecond($currentDate, $moonPhases[MoonPhases::NEW_MOON]) < 0) {
+            foreach ($moonPhases as $moonPhase => $value) {
+                if ($this->dateTimeDiffToSecond($currentDate, $value) > 0) {
+                    $return = $moonPhase - 1;
+                    break;
+                }
+            }
+        } elseif ($this->dateTimeDiffToSecond($currentDate, $moonPhases[MoonPhases::NEW_MOON]) == 0) {
+            $return =  MoonPhases::NEW_MOON;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Return an array of all moon phases
+     *
+     * @return Array
+     */
+    public function getAllMoonPhases()
+    {
+        $moonPhases[MoonPhases::NEW_MOON]        = $this->getNewMoon();
+        $moonPhases[MoonPhases::WAXING_CRESCENT] = $this->getWaxingCrescent();
+        $moonPhases[MoonPhases::FIRST_QUARTER]   = $this->getFirstQuarter();
+        $moonPhases[MoonPhases::WAXING_GIBBOUS]  = $this->getWaxingGibbous();
+        $moonPhases[MoonPhases::FULL_MOON]       = $this->getFullMoon();
+        $moonPhases[MoonPhases::WANING_GIBBOUS]  = $this->getWaningGibbous();
+        $moonPhases[MoonPhases::LAST_QUARTER]    = $this->getLastQuarter();
+        $moonPhases[MoonPhases::WANING_CRESCENT] = $this->getWaningCrescent();
+
+        return $moonPhases;
+    }
+
     /**
      * Convert a php DateTime object in a decimal year
      *
@@ -321,7 +371,7 @@ class MoonPhaseCalculator
         $h = floor(24 * ($julianDays - floor($julianDays))) + 12;
         $m =  floor(1440 * (($julianDays - floor($julianDays)) - (($h - 12) / 24)));
         $s = 86400 * (($julianDays - floor($julianDays)) - (($h - 12) / 24) - ($m / 1440) ) ;
-        $dateTime = new DateTime(jdtogregorian(floor($julianDays)), new DateTimeZone('Europe/Paris'));
+        $dateTime = new DateTime(jdtogregorian(floor($julianDays)), $this->timeZone);
         $dateTime->add(new DateInterval('PT'.$h.'H'.$m.'M'.floor($s).'S'));
 
         return $dateTime;
@@ -336,6 +386,27 @@ class MoonPhaseCalculator
     private function convertAngleOn360DegInterval($angle)
     {
         return ($angle / 360 - floor($angle / 360)) * 360;
+    }
+
+    /**
+     * Compute interval in second between two php DateTime object
+     *
+     * @param DateTime $start
+     * @param DateTime $end
+     * @return string
+     */
+    private function dateTimeDiffToSecond(DateTime $start, DateTime $end)
+    {
+        $diff = $start->diff($end);
+
+        $daysToSec = (Integer) $diff->days * 86400;
+        $hoursToSec = (Integer) $diff->format('%H') * 3600;
+        $minutesToSec = (Integer) $diff->format('%I') * 60;
+        $seconds = (Integer) $diff->format('%S');
+        $diffSec = $daysToSec + $hoursToSec + $minutesToSec + $seconds;
+
+        $signedDiffSec = $diff->format('%r').$diffSec;
+        return (Integer) $signedDiffSec;
     }
 
     /**
