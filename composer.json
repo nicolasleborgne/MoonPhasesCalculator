@@ -1,6 +1,6 @@
 {
     "name": "nicolasleborgne/moon-phases-calculator",
-    "description": "Generate each moon phases in a synodic period from a given date, compute actual moon phases from current date.",
+    "description": "A fully oriented object php package that allowed to compute moon phases. Accuracy is about a few minutes.",
     "keywords": ["moon", "phase", "phases", "astronomy"],
     "homepage": "http://github.com/nicolasleborgne/MoonPhasesCalculator",
     "type": "library",
@@ -11,7 +11,6 @@
             "email": "le.borgne.nicolas44@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.0"
     },
