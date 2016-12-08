@@ -61,4 +61,10 @@ class MoonPhaseCalculatorTest extends PHPUnit_Framework_TestCase
         $expectedResult = new DateTime('2016-11-25 01:10:58', new DateTimeZone('Europe/Paris'));
         $this->assertEquals($expectedResult->format('Y-m-d H:i:s'), $moonPhaseCalculator->getWaningCrescent()->format('Y-m-d H:i:s'));
     }
+
+    public function testGetMoonPhaseFromDateTime()
+    {
+        $moonPhaseCalculator = new MoonPhaseCalculator(new DateTime("2016-11-16", new DateTimeZone('Europe/Paris')), new DateTimeZone('Europe/Paris'));
+        $this->assertEquals(4, $moonPhaseCalculator->getMoonPhaseFromDateTime());
+    }
 }

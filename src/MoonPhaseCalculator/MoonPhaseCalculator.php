@@ -331,6 +331,36 @@ class MoonPhaseCalculator
     }
 
     /**
+     * Get the actual moon phase from a php DateTime object
+     *
+     * @return int|null|string
+     */
+    public function getMoonPhaseFromDateTime()
+    {
+        $return = null;
+        $initialDateTime = clone $this->dateTime;
+
+        if ($this->dateTimeDiffToSecond($this->dateTime, $this->getNewMoon()) > 0) {
+            $this->setDateTime($this->dateTime->sub(new DateInterval('P15D')));
+        }
+
+        $moonPhases = $this->getAllMoonPhases();
+
+        if ($this->dateTimeDiffToSecond($initialDateTime, $moonPhases[MoonPhases::NEW_MOON]) < 0) {
+            foreach ($moonPhases as $moonPhase => $value) {
+                if ($this->dateTimeDiffToSecond($initialDateTime, $value) > 0) {
+                    $return = $moonPhase - 1;
+                    break;
+                }
+            }
+        } elseif ($this->dateTimeDiffToSecond($initialDateTime, $moonPhases[MoonPhases::NEW_MOON]) == 0) {
+            $return =  MoonPhases::NEW_MOON;
+        }
+
+        return $return;
+    }
+
+    /**
      * Return an array of all moon phases
      *
      * @return Array
