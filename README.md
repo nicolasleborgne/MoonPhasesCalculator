@@ -1,3 +1,7 @@
+[![Latest Stable Version](https://poser.pugx.org/nicolasleborgne/moon-phases-calculator/v/stable)](https://packagist.org/packages/nicolasleborgne/moon-phases-calculator)
+[![Latest Unstable Version](https://poser.pugx.org/nicolasleborgne/moon-phases-calculator/v/unstable)](https://packagist.org/packages/nicolasleborgne/moon-phases-calculator)
+[![Total Downloads](https://poser.pugx.org/nicolasleborgne/moon-phases-calculator/downloads)](https://packagist.org/packages/nicolasleborgne/moon-phases-calculator)
+[![License](https://poser.pugx.org/nicolasleborgne/moon-phases-calculator/license)](https://packagist.org/packages/nicolasleborgne/moon-phases-calculator)
 # MoonPhaseCalculator
 A php package that allowed to compute moon phases. Accuracy is about a few minutes.
 
