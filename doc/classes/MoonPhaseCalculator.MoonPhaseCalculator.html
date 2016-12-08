@@ -144,19 +144,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-185699514"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1642358313"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-185699514" class="accordion-body collapse in">
+            <div id="namespace-1642358313" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1974301457"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2023079758"></a>
                                 <a href="../namespaces/MoonPhaseCalculator.html" style="margin-left: 30px; padding-left: 0">MoonPhaseCalculator</a>
             </div>
-            <div id="namespace-1974301457" class="accordion-body collapse ">
+            <div id="namespace-2023079758" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -220,6 +220,9 @@ It is based on the Jean Meeus Algorythm.</p>
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_getWaningGibbous" class="">getWaningGibbous()</a><br />
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_getLastQuarter" class="">getLastQuarter()</a><br />
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_getWaningCrescent" class="">getWaningCrescent()</a><br />
+                                                                    <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_getCurrentMoonPhase" class="">getCurrentMoonPhase()</a><br />
+                                                                    <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_getMoonPhaseFromDateTime" class="">getMoonPhaseFromDateTime()</a><br />
+                                                                    <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_getAllMoonPhases" class="">getAllMoonPhases()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
@@ -245,6 +248,7 @@ It is based on the Jean Meeus Algorythm.</p>
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_convertDateTimeToFloat" class="">convertDateTimeToFloat()</a><br />
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_convertJDToDateTime" class="">convertJDToDateTime()</a><br />
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_convertAngleOn360DegInterval" class="">convertAngleOn360DegInterval()</a><br />
+                                                                    <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_dateTimeDiffToSecond" class="">dateTimeDiffToSecond()</a><br />
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_computeK" class="">computeK()</a><br />
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_computeT" class="">computeT()</a><br />
                                                                     <a href="../classes/MoonPhaseCalculator.MoonPhaseCalculator.html#method_computeE" class="">computeE()</a><br />
@@ -300,6 +304,30 @@ It is based on the Jean Meeus Algorythm.</p>
                             </th>
                             <td>
                                                                     <p>Nicolas Le Borgne <a href="mailto:le.borgne.nicolas44@gmail.com">le.borgne.nicolas44@gmail.com</a></p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                version
+                            </th>
+                            <td>
+                                                                    <p>v1.0.0 First release of the library</p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                since
+                            </th>
+                            <td>
+                                                                    <p>v1.0.0 First release of the library</p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                license
+                            </th>
+                            <td>
+                                                                    <p>MIT <a href="https://opensource.org/licenses/MIT">https://opensource.org/licenses/MIT</a></p>
                                                             </td>
                         </tr>
                                         </table>
@@ -769,6 +797,90 @@ It is based on the Jean Meeus Algorythm.</p>
         </aside>
     </div>
 
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCurrentMoonPhase" name="method_getCurrentMoonPhase" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCurrentMoonPhase()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCurrentMoonPhase() : integer|null|string</pre>
+                <p><em>Get the actual moon phase from the current date</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer|null|string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getMoonPhaseFromDateTime" name="method_getMoonPhaseFromDateTime" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getMoonPhaseFromDateTime()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getMoonPhaseFromDateTime() : integer|null|string</pre>
+                <p><em>Get the actual moon phase from a php DateTime object</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer|null|string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAllMoonPhases" name="method_getAllMoonPhases" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getAllMoonPhases()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAllMoonPhases() : Array</pre>
+                <p><em>Return an array of all moon phases</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    Array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
                                                                     <div class="row-fluid">
         <div class="span8 content class">
             <a id="method_convertDateTimeToFloat" name="method_convertDateTimeToFloat" class="anchor"></a>
@@ -863,6 +975,47 @@ It is based on the Jean Meeus Algorythm.</p>
                 
                                     <h4>Returns</h4>
                     float
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_dateTimeDiffToSecond" name="method_dateTimeDiffToSecond" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">dateTimeDiffToSecond()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">dateTimeDiffToSecond(\DateTime  <span class="argument">$start</span>, \DateTime  <span class="argument">$end</span>) : string</pre>
+                <p><em>Compute interval in second between two php DateTime object</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\DateTime</td>
+                                <td>$start </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>\DateTime</td>
+                                <td>$end </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
                                     				
                             </article>
         </div>
@@ -1536,7 +1689,7 @@ It is based on the Jean Meeus Algorythm.</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on December 4th, 2016 at 12:39.
+                    on December 8th, 2016 at 20:19.
                 </section>
             </section>
         </section>

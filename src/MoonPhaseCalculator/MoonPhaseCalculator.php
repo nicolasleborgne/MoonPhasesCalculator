@@ -23,8 +23,11 @@ use \DateInterval;
  *
  * @author Nicolas Le Borgne <le.borgne.nicolas44@gmail.com>
  * @package MoonPhaseCalculator
+ * @version v1.0.0 First release of the library
+ * @since v1.0.0 First release of the library
  * @see http://zpag.net/Calendrier/calculer_phases_lune.htm
  * @see http://zpag.net/Calendrier/phase_moon_Algorithms.pdf
+ * @license MIT https://opensource.org/licenses/MIT
  */
 class MoonPhaseCalculator
 {

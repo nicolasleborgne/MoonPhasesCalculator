@@ -17,6 +17,9 @@ namespace MoonPhaseCalculator;
  *
  * @author Nicolas Le Borgne <le.borgne.nicolas44@gmail.com>
  * @package MoonPhaseCalculator
+ * @version v1.0.0 First release of the library
+ * @since v1.0.0 First release of the library
+ * @license MIT https://opensource.org/licenses/MIT
  */
 abstract class MoonPhases
 {
