@@ -31,7 +31,6 @@ use \DateInterval;
  */
 class MoonPhaseCalculator
 {
-
     /**
      * TimeZone to use for returning the DateTime
      *
@@ -70,7 +69,7 @@ class MoonPhaseCalculator
      * @param DateTime $dateTime
      * @param DateTimeZone|null $timeZone
      */
-    function __construct(DateTime $dateTime, DateTimeZone $timeZone = null)
+    public function __construct(DateTime $dateTime, DateTimeZone $timeZone = null)
     {
         $this->timeZone = $timeZone;
         $this->setDateTime($dateTime);
@@ -404,7 +403,7 @@ class MoonPhaseCalculator
     {
         $h = floor(24 * ($julianDays - floor($julianDays))) + 12;
         $m =  floor(1440 * (($julianDays - floor($julianDays)) - (($h - 12) / 24)));
-        $s = 86400 * (($julianDays - floor($julianDays)) - (($h - 12) / 24) - ($m / 1440) ) ;
+        $s = 86400 * (($julianDays - floor($julianDays)) - (($h - 12) / 24) - ($m / 1440)) ;
         $dateTime = new DateTime(jdtogregorian(floor($julianDays)), $this->timeZone);
         $dateTime->add(new DateInterval('PT'.$h.'H'.$m.'M'.floor($s).'S'));
 
@@ -557,7 +556,6 @@ class MoonPhaseCalculator
     private function computeW($e, $m, $mp, $f)
     {
         return 0.00306 - (0.00038 * $e * cos(deg2rad($m))) + (0.00026 * cos(deg2rad($mp))) - (0.00002 * cos(deg2rad($mp - $m))) + (0.00002 * cos(deg2rad($mp + $m))) + (0.00002 * cos(deg2rad(2 * $f)));
-
     }
 
     /**
@@ -605,7 +603,7 @@ class MoonPhaseCalculator
      * @param array $planetaryArguments
      * @return number
      */
-    private function getFirstCorrectionsFactorsGroupFromPlanetaryArguments(Array $planetaryArguments)
+    private function getFirstCorrectionsFactorsGroupFromPlanetaryArguments(array $planetaryArguments)
     {
         $corrections[] = 0.000325 * sin(deg2rad($planetaryArguments[0]));
         $corrections[] = 0.000165 * sin(deg2rad($planetaryArguments[1]));
@@ -719,9 +717,9 @@ class MoonPhaseCalculator
      */
     private function getFourthCorrectionsFactors($e, $mp, $m, $f, $ohm)
     {
-        $corrections[] = -0.62801 * sin(deg2rad( $mp));
-        $corrections[] = 0.17172 * $e * sin(deg2rad( $m));
-        $corrections[] = -0.01183 * $e * sin(deg2rad( $mp + $m));
+        $corrections[] = -0.62801 * sin(deg2rad($mp));
+        $corrections[] = 0.17172 * $e * sin(deg2rad($m));
+        $corrections[] = -0.01183 * $e * sin(deg2rad($mp + $m));
         $corrections[] = 0.00862 * sin(deg2rad(2 * $mp));
         $corrections[] = 0.00804 * sin(deg2rad(2 * $f));
         $corrections[] = 0.00454 * $e * sin(deg2rad($mp - $m));

@@ -6,7 +6,6 @@ use \DateTimeZone;
 
 class MoonPhaseCalculatorTest extends PHPUnit_Framework_TestCase
 {
-
     public function testGetNewMoon()
     {
         $moonPhaseCalculator = new MoonPhaseCalculator(new DateTime("2016-11-01", new DateTimeZone('Europe/Paris')), new DateTimeZone('Europe/Paris'));
