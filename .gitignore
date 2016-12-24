@@ -3,3 +3,4 @@ test.php
 /vendor/
 .idea/
 .DS_Store
+.php_cs.cache
