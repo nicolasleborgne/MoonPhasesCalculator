@@ -23,6 +23,7 @@ namespace MoonPhaseCalculator;
  */
 abstract class MoonPhases
 {
+    
     /**
      * Integer value for new moon
      */

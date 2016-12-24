@@ -31,6 +31,7 @@ use \DateInterval;
  */
 class MoonPhaseCalculator
 {
+
     /**
      * TimeZone to use for returning the DateTime
      *
